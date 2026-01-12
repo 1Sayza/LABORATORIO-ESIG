@@ -62,3 +62,8 @@ com coleta de métricas por **Prometheus** e **Node Exporter**.
 cd docker
 ./../scripts/build.sh
 ./../scripts/run-local.sh
+
+### 3. Acesso ao Jenkins
+
+Jenkins: http://localhost:8080
+
