@@ -71,3 +71,19 @@ Jenkins: http://localhost:8080
 
 Endpoint: http://localhost:<PORTA_JOLOKIA>/jolokia/
 
+## Etapa 2 — Kubernetes (Deployment + Service)
+
+### 1. Pré-requisitos
+- `kubectl` instalado
+- Um cluster Kubernetes local (recomendado: **minikube** ou **kind**)
+- (Opcional) `docker` para buildar a imagem localmente
+
+### 2. Subir o cluster (escolha uma opção)
+
+#### Opção A — Minikube
+```bash
+minikube start
+kubectl cluster-info
+```
+
+
