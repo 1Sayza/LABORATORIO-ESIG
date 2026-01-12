@@ -62,8 +62,12 @@ com coleta de métricas por **Prometheus** e **Node Exporter**.
 cd docker
 ./../scripts/build.sh
 ./../scripts/run-local.sh
-
+````
 ### 3. Acesso ao Jenkins
 
 Jenkins: http://localhost:8080
+
+### 4. Validar métricas Jolokia
+
+Endpoint: http://localhost:<PORTA_JOLOKIA>/jolokia/
 
