@@ -108,7 +108,7 @@ curl -s http://127.0.0.1:8778/jolokia/version | jq
 
 ---
 
-## Etapa 2 - Kubernetes (Deployment + Service)
+## Etapa 2 — Kubernetes (Deployment + Service)
 
 ### 1. Criar namespaces
 ```bash
@@ -159,7 +159,7 @@ curl -s http://127.0.0.1:8778/jolokia/version | jq
 
 ---
 
-## 3. Monitoramento (Prometheus + Jolokia + Node Exporter)
+## Etapa 3 — Monitoramento (Prometheus + Jolokia + Node Exporter)
 
 ### 1. Node Exporter
 Aplicar:
