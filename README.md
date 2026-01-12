@@ -14,11 +14,9 @@
 - [Pré-requisitos](#pré-requisitos)
 - [Etapa 1 — Docker (Tomcat/JBoss + Jenkins WAR + Jolokia)](#etapa-1--docker-tomcatjboss--jenkins-war--jolokia)
 - [Etapa 2 — Kubernetes](#etapa-2---kubernetes-deployment--service)
-- [Etapa 3 — Monitoramento (Prometheus + Node Exporter)](#etapa-3--monitoramento-prometheus--node-exporter)
+- [Etapa 3 — Monitoramento (Prometheus + Node Exporter)](#3-monitoramento-prometheus--jolokia--node-exporter)
 - [Segurança (boas práticas aplicadas)](#segurança-boas-práticas-aplicadas)
-- [Troubleshooting](#troubleshooting)
-- [Evidências](#evidências)
-- [Roadmap / Melhorias](#roadmap--melhorias)
+
 
 ---
 
@@ -112,19 +110,19 @@ curl -s http://127.0.0.1:8778/jolokia/version | jq
 
 ## Etapa 2 - Kubernetes (Deployment + Service)
 
-## 1. Criar namespaces
+### 1. Criar namespaces
 ```bash
 kubectl create namespace jenkins-lab
 kubectl create namespace monitoring
 ```
-## 2. Publicar a imagem no cluster
+### 2. Publicar a imagem no cluster
 ```bash
 cd docker
 docker build -t jenkins-jolokia:latest .
 kind load docker-image jenkins-jolokia:latest
 ```
 
-## 3. Manifestos (base)
+### 3. Manifestos (base)
 
 Crie em k8s/base/:
 
@@ -145,19 +143,54 @@ kubectl apply -f k8s/base/ -n jenkins-lab
 kubectl get pods -n jenkins-lab
 kubectl get svc -n jenkins-lab
 ```
-## 4. Acessar Jenkins com port-forward (mais seguro)
+### 4. Acessar Jenkins com port-forward (mais seguro)
 ```bash
 kubectl -n jenkins-lab port-forward svc/jenkins 8080:8080
 ```
 - Acesse: http://localhost:8080
 
-## 5. Validar Jolokia no cluster
+### 5. Validar Jolokia no cluster
 
 Se o Jolokia estiver no Pod, valide com port-forward temporário:
 ```bash
 kubectl -n jenkins-lab port-forward svc/jenkins 8778:8778
 curl -s http://127.0.0.1:8778/jolokia/version | jq
 ```
+
+---
+
+## 3. Monitoramento (Prometheus + Jolokia + Node Exporter)
+
+### 1. Node Exporter
+Aplicar:
+```bash
+kubectl apply -f k8s/monitoring/node-exporter/ -n monitoring
+kubectl get pods -n monitoring -l app=node-exporter
+```
+
+### 2. Prometheus (Deployment + ConfigMap + Service)
+Aplicar:
+```bash
+kubectl apply -f k8s/monitoring/prometheus/ -n monitoring
+kubectl get pods -n monitoring
+kubectl get svc -n monitoring
+```
+Acessar Prometheus (port-forward):
+```bash
+Acessar Prometheus (port-forward):
+```
+Abrir:
+- http://localhost:9090/targets
+
+### 3. Garantir que “Targets” estão UP
+
+Você precisa ver:
+
+- job do node-exporter como UP
+- job do jenkins/jolokia como UP
+
+
+
 
 
 
