@@ -70,6 +70,8 @@ docker/
 - Baixe jenkins.war (última versão) e salve em: docker/jenkins.war
 - Baixe o Jolokia JVM agent (jolokia-jvm.jar) e salve em: docker/jolokia-jvm.jar
 
+https://hub.docker.com/r/jolokia/java-jolokia?utm_source=chatgpt.com
+
 ### 3. Configurar Jolokia
 
 - Crie docker/jolokia.properties:
