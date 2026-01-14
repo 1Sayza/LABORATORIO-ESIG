@@ -8,11 +8,11 @@
 [![Observability](https://img.shields.io/badge/metrics-jolokia%20%2B%20prometheus-brightgreen)](#)
 
 ## Sumário
-- [Arquitetura](#arquitetura)
-- [Etapa 1 — Docker (Jenkins Oficial + Jolokia)](#etapa-1--docker-tomcatjboss--jenkins-war--jolokia)
+- [Arquitetura](#laborat%C3%B3rio-devops--jenkins--docker--kubernetes--prometheus-jolokia)
+- [Etapa 1 — Docker (Jenkins Oficial + Jolokia)](#etapa-1--docker-jenkins-oficial--jolokia)
 - [Etapa 2 — Kubernetes (Deployment + Service)](#etapa-2--kubernetes-deployment--service)
 - [Etapa 3 — Monitoramento (Prometheus + Jolokia + Node Exporter)](#etapa-3--monitoramento-prometheus--jolokia--node-exporter)
-- [Segurança (boas práticas aplicadas)](#segurança-boas-práticas-aplicadas)
+- [Segurança (boas práticas aplicadas)](#boas-pr%C3%A1ticas-de-seguran%C3%A7a-aplicada)
 
 
 ---
