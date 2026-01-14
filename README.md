@@ -1,20 +1,17 @@
 # PROJETO DEVOPS LABORATÓRIO ESIG
 
-<img width="1536" height="1024" alt="projeto-devops" src="https://github.com/user-attachments/assets/de84183a-bbfc-4086-8041-2cd8ffb8f80c" />
+<img width="1536" height="1024" alt="fluxograma" src="https://github.com/user-attachments/assets/95986203-cd84-41b7-97db-78084ca6e9fd" />
 
-# Jenkins (WAR) em Tomcat/JBoss + Jolokia + Kubernetes + Prometheus
 
 [![Docker](https://img.shields.io/badge/docker-ready-blue)](#)
 [![Kubernetes](https://img.shields.io/badge/kubernetes-manifests-blue)](#)
 [![Observability](https://img.shields.io/badge/metrics-jolokia%20%2B%20prometheus-brightgreen)](#)
 
 ## Sumário
-- [Objetivo](#objetivo)
 - [Arquitetura](#arquitetura)
-- [Pré-requisitos](#pré-requisitos)
-- [Etapa 1 — Docker (Tomcat/JBoss + Jenkins WAR + Jolokia)](#etapa-1--docker-tomcatjboss--jenkins-war--jolokia)
-- [Etapa 2 — Kubernetes](#etapa-2--kubernetes-deployment--service)
-- [Etapa 3 — Monitoramento (Prometheus + Node Exporter)](#etapa-3--monitoramento-prometheus--jolokia--node-exporter)
+- [Etapa 1 — Docker (Jenkins Oficial + Jolokia)](#etapa-1--docker-tomcatjboss--jenkins-war--jolokia)
+- [Etapa 2 — Kubernetes (Deployment + Service)](#etapa-2--kubernetes-deployment--service)
+- [Etapa 3 — Monitoramento (Prometheus + Jolokia + Node Exporter)](#etapa-3--monitoramento-prometheus--jolokia--node-exporter)
 - [Segurança (boas práticas aplicadas)](#segurança-boas-práticas-aplicadas)
 
 
