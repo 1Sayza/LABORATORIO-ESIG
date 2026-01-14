@@ -201,21 +201,25 @@ Você precisa ver:
 
 - job do node-exporter como UP
 - job do jenkins/jolokia como UP
-  
+
+<img width="1877" height="495" alt="image" src="https://github.com/user-attachments/assets/229aca3d-7f91-4142-9eb1-21b3a068f78e" />
+
 ---
 
 ## Boas Práticas de Segurança Aplicada
 
-- Segurança do Jolokia (validação do acesso)
+### Visão geral do fluxo de métricas
 
-- Para garantir que o Jolokia não ficasse exposto de forma insegura, o ambiente foi configurado com duas camadas de proteção:
+**Objetivo:** coletar métricas do Jenkins (Java/JVM) sem expor o Jolokia de forma insegura.
 
-O Jolokia não está em modo “open” e segue as regras definidas na policy.
+Fluxo aplicado:
 
-Porta 8778 limitada ao localhost do host: o mapeamento foi feito com bind em 127.0.0.1, exibido no docker ps como:
-127.0.0.1:8778->8778/tcp
+1. **Jenkins** roda com **Jolokia Agent** (porta interna 8778)
+2. **Auth Proxy (Nginx sidecar)** injeta autenticação Basic para o Jolokia
+3. **Jolokia Exporter (sidecar)** converte Jolokia → endpoint Prometheus `/metrics` (porta 9422)
+4. **Prometheus** faz scrape do endpoint `/metrics` via Service ClusterIP (sem expor 8778)
 
-Dessa forma, a porta não fica acessível pela rede, permitindo acesso ao Jolokia apenas localmente no servidor, reduzindo significativamente a superfície de ataque.
+- Resultado: Prometheus coleta métricas sem precisar publicar 8778 na rede.
 
 
 
