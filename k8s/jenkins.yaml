@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cicd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: esig/jenkins-jolokia:2.528.3
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: jolokia
+              containerPort: 8778
+          env:
+            - name: JOLOKIA_USER
+              value: "admin"
+            - name: JOLOKIA_PASSWORD
+              value: "linux@@123"
+          # (opcional) limites básicos
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: cicd
+spec:
+  selector:
+    app: jenkins
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+  type: ClusterIP
+

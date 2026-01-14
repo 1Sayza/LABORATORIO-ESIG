@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jolokia-mapping
+  namespace: cicd
+data:
+  config.yaml: |
+    metrics:
+      - source:
+          mbean: java.lang:type=Memory
+          attribute: HeapMemoryUsage
+          path: used
+        target: java_memory_heap_used
+      - source:
+          mbean: java.lang:type=Threading
+          attribute: ThreadCount
+        target: java_threads
+      - source:
+          mbean: java.lang:type=Runtime
+          attribute: Uptime
+        target: java_uptime_ms
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-mon
+  namespace: cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-mon
+  template:
+    metadata:
+      labels:
+        app: jenkins-mon
+    spec:
+      volumes:
+        - name: mapping
+          configMap:
+            name: jolokia-mapping
+      containers:
+        - name: jenkins
+          image: esig/jenkins-jolokia:2.528.3
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: jolokia
+              containerPort: 8778
+          env:
+            - name: JOLOKIA_USER
+              value: "admin"
+            - name: JOLOKIA_PASSWORD
+              value: "linux@@123"
+        - name: jolokia-exporter
+          image: scalify/jolokia_exporter:latest
+          args: ["export","/mapping/config.yaml","http://localhost:8778/jolokia"]
+          ports:
+            - name: metrics
+              containerPort: 9422
+          volumeMounts:
+            - name: mapping
+              mountPath: /mapping
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-metrics
+  namespace: cicd
+spec:
+  selector:
+    app: jenkins-mon
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: metrics
+      port: 9422
+      targetPort: metrics
+  type: ClusterIP
+

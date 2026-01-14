@@ -1,0 +1,29 @@
+# segredos
+*.key
+*.pem
+*.pfx
+*.p12
+*.env
+.env
+secrets/
+**/secrets/
+
+# logs e temporários
+*.log
+tmp/
+temp/
+
+# dados/volumes (não versionar)
+data/
+db/
+mariadb/
+postgres/
+volumes/
+**/volumes/
+
+# artefatos grandes
+*.tar
+*.tar.gz
+*.zip
+*.war
+*.jar

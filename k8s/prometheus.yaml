@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: "node-exporter"
+        static_configs:
+          - targets: ["node-exporter.monitoring.svc.cluster.local:9100"]
+
+      - job_name: "jenkins-jolokia"
+        static_configs:
+          - targets: ["jenkins-metrics.cicd.svc.cluster.local:9422"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      volumes:
+        - name: cfg
+          configMap:
+            name: prometheus-config
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+          args: ["--config.file=/etc/prometheus/prometheus.yml"]
+          ports:
+            - name: web
+              containerPort: 9090
+          volumeMounts:
+            - name: cfg
+              mountPath: /etc/prometheus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: web
+      port: 9090
+      targetPort: web
+  type: ClusterIP
+
