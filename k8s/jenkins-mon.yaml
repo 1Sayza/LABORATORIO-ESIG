@@ -20,6 +20,18 @@ data:
           attribute: Uptime
         target: java_uptime_ms
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-home
+  namespace: cicd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,10 +47,15 @@ spec:
       labels:
         app: jenkins-mon
     spec:
+      securityContext:
+        fsGroup: 1000
       volumes:
         - name: mapping
           configMap:
             name: jolokia-mapping
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-home
       containers:
         - name: jenkins
           image: esig/jenkins-jolokia:2.528.3
@@ -52,6 +69,9 @@ spec:
               value: "admin"
             - name: JOLOKIA_PASSWORD
               value: "linux@@123"
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
         - name: jolokia-exporter
           image: scalify/jolokia_exporter:latest
           args: ["export","/mapping/config.yaml","http://localhost:8778/jolokia"]
@@ -78,4 +98,5 @@ spec:
       port: 9422
       targetPort: metrics
   type: ClusterIP
+
 
