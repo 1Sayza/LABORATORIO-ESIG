@@ -178,7 +178,13 @@ Você deve ver como UP:
 - jenkins-jolokia (scrape em jenkins-metrics:9422/metrics)
 - node-exporter (scrape em node-exporter:9100/metrics)
 
-<img width="1877" height="495" alt="image" src="https://github.com/user-attachments/assets/229aca3d-7f91-4142-9eb1-21b3a068f78e" />
+<img width="1780" height="895" alt="image" src="https://github.com/user-attachments/assets/c1d60d6a-f716-42b9-a44c-ce43655bd2d8" />
+
+
+
+### 5) Grafana
+
+<img width="1893" height="907" alt="image" src="https://github.com/user-attachments/assets/496a7a66-2293-4c88-8c58-0e3cc1b1723a" />
 
 ---
 
