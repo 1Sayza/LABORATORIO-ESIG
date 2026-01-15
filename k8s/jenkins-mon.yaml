@@ -21,6 +21,28 @@ data:
         target: java_uptime_ms
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jolokia-proxy-nginx
+  namespace: cicd
+data:
+  default.conf: |
+    server {
+      listen 8878;
+
+      # garante que /jolokia redirecione para /jolokia/
+      location = /jolokia {
+        return 301 /jolokia/;
+      }
+
+      # proxy do Jolokia (com barra no final)
+      location /jolokia/ {
+        proxy_set_header Authorization "Basic YWRtaW46bGludXhAQDEyMw==";
+        proxy_pass http://127.0.0.1:8778/jolokia/;
+      }
+    }
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: jenkins-home
@@ -56,6 +78,9 @@ spec:
         - name: jenkins-home
           persistentVolumeClaim:
             claimName: jenkins-home
+        - name: jolokia-proxy-nginx
+          configMap:
+            name: jolokia-proxy-nginx
       containers:
         - name: jenkins
           image: esig/jenkins-jolokia:2.528.3
@@ -72,9 +97,20 @@ spec:
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
+
+        - name: jolokia-proxy
+          image: nginx:alpine
+          ports:
+            - name: proxy
+              containerPort: 8878
+          volumeMounts:
+            - name: jolokia-proxy-nginx
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+
         - name: jolokia-exporter
           image: scalify/jolokia_exporter:latest
-          args: ["export","/mapping/config.yaml","http://localhost:8778/jolokia"]
+          args: ["export","/mapping/config.yaml","http://localhost:8878/jolokia/"]
           ports:
             - name: metrics
               containerPort: 9422
@@ -98,5 +134,3 @@ spec:
       port: 9422
       targetPort: metrics
   type: ClusterIP
-
-
