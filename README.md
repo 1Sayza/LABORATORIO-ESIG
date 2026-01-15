@@ -30,13 +30,15 @@ Este repositório documenta a montagem de um laboratório em **3 etapas**:
 ```bash
 esig-jenkins/
 ├─ docker/
-│ ├─ Dockerfile
-│ ├─ docker-entrypoint.sh
-│ └─ jolokia-access.xml
+│  ├─ Dockerfile
+│  ├─ docker-entrypoint.sh
+│  └─ jolokia-access.xml
 └─ k8s/
-├─ jenkins.yaml
-├─ jenkins-mon.yaml
-└─ prometheus.yaml
+   ├─ jenkins.yaml
+   ├─ jenkins-mon.yaml
+   ├─ prometheus.yaml
+   ├─ node-exporter.yaml
+   └─ grafana.yaml
 ```
 
 ## Etapa 1 — Docker (Jenkins Oficial + Jolokia)
