@@ -19,7 +19,7 @@ metadata:
 type: Opaque
 stringData:
   admin-user: admin
-  admin-password: admin123
+  admin-password: <SENHA>
 ---
 apiVersion: v1
 kind: ConfigMap
